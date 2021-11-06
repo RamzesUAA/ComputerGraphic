@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,107 +9,115 @@ namespace CG_Project.Services
 {
     public class KochSnowflake
     {
-        public int numberOfIterations { get; set; }
-        public Polyline pl = new Polyline();
-        public int II { get; set; }
-        public int i { get; set; }
+        public List<Segment> Segments;
+        public Canvas FractalCanvas;
+        public Polyline KochPolyline = new Polyline();
 
-        private double[] dTheta;
-        private double distanceScale;
-        private double SnowflakeSize = default;
-        private Point SnowflakePoint = new Point();
-        private double Height { get; set; }
-        private double Width { get; set; }
-
-        public KochSnowflake(double height, double width) : this()
+        public KochSnowflake(Canvas fractalCanvas)
         {
-            Height = height;
-            Width = width;
-            double ysize = 0.8 * height /
-                           (Math.Sqrt(3) * 4 / 3);
-            double xsize = 0.8 * width / 2;
-            double size = 0;
-            if (ysize < xsize)
-                size = ysize;
-            else
-                size = xsize;
-            SnowflakeSize = 2 * size;
-            pl.Stroke = Brushes.Blue;
+            FractalCanvas = fractalCanvas;
         }
 
-        private KochSnowflake()
+        public void RunGeometricKochSnowflake(int numberOfIterations)
         {
-            distanceScale = 1.0 / 3;
-            dTheta = new double[4] { 0, Math.PI / 3,
-                -2 * Math.PI / 3, Math.PI / 3 };
-        }
-
-        public void StartAnimation(object sender,
-       EventArgs e)
-        {
-            i += 1;
-            if (i % 60 == 0)
+            InitKochSnowflake();
+            for (int i = 0; i < numberOfIterations; ++i)
             {
-                pl.Points.Clear();
-                DrawSnowFlake(SnowflakeSize, II);
-                string str = "Snow Flake - Depth = " +
-                II.ToString();
-                II += 1;
-                if (II > numberOfIterations)
+                List<Segment> nextGeneration = new List<Segment>();
+
+                foreach (var segment in Segments)
                 {
-                    CompositionTarget.Rendering -=
-                    StartAnimation;
+                    Segment[] children = segment.generate();
+                    nextGeneration.AddRange(children);
                 }
+
+                Segments = nextGeneration;
+
             }
-        }
-        private void SnowFlakeEdge(int depth, double theta, double distance)
-        {
-            Point pt = new Point();
-            if (depth <= 0)
+
+            foreach (var segment in Segments)
             {
-                pt.X = SnowflakePoint.X +
-                distance * Math.Cos(theta);
-                pt.Y = SnowflakePoint.Y +
-                distance * Math.Sin(theta);
-                pl.Points.Add(pt);
-                SnowflakePoint = pt;
-                return;
-            }
-            distance *= distanceScale;
-            for (int j = 0; j < 4; j++)
-            {
-                theta += dTheta[j];
-                SnowFlakeEdge(depth - 1,
-                theta, distance);
+                Show(segment.a, segment.b);
             }
         }
 
-        private void DrawSnowFlake(
-        double length, int depth)
+        private void InitKochSnowflake()
         {
-            double xmid = Width / 2;
-            double ymid = Height / 2;
-            Point[] pta = new Point[4];
-            pta[0] = new Point(xmid, ymid + length / 2 *
-            Math.Sqrt(3) * 2 / 3);
-            pta[1] = new Point(xmid + length / 2,
-            ymid - length / 2 * Math.Sqrt(3) / 3);
-            pta[2] = new Point(xmid - length / 2,
-            ymid - length / 2 * Math.Sqrt(3) / 3);
-            pta[3] = pta[0];
-            pl.Points.Add(pta[0]);
-            for (int j = 1; j < pta.Length; j++)
-            {
-                double x1 = pta[j - 1].X;
-                double y1 = pta[j - 1].Y;
-                double x2 = pta[j].X;
-                double y2 = pta[j].Y;
-                double dx = x2 - x1;
-                double dy = y2 - y1;
-                double theta = Math.Atan2(dy, dx);
-                SnowflakePoint = new Point(x1, y1);
-                SnowFlakeEdge(depth, theta, length);
-            }
+            FractalCanvas.Children.Clear();
+            Segments = new List<Segment>();
+
+            KochPolyline.Stroke = Brushes.Blue;
+            Point a = new Point((FractalCanvas.Width - FractalCanvas.Height) / 2, 125);
+            Point b = new Point(FractalCanvas.Width - (FractalCanvas.Width - FractalCanvas.Height) / 2, 125);
+            Point c = new Point(FractalCanvas.Width / 2, FractalCanvas.Height - 10);
+            Segment s1 = new Segment(a, b);
+            Segment s2 = new Segment(b, c);
+            Segment s3 = new Segment(c, a);
+            Segments.Add(s1);
+            Segments.Add(s2);
+            Segments.Add(s3);
+        }
+
+        public void Show(Point a, Point b)
+        {
+            var line = new Line();
+            line.Stroke = Brushes.Black;
+
+            line.X1 = a.X;
+            line.Y1 = a.Y;
+
+            line.X2 = b.X;
+            line.Y2 = b.Y;
+
+            line.StrokeThickness = 2;
+            FractalCanvas.Children.Add(line);
+        }
+    }
+
+    public class Segment
+    {
+        public Point a;
+        public Point b;
+
+        public Segment(Point _a, Point _b)
+        {
+            a = _a;
+            b = _b;
+        }
+
+        public Segment[] generate()
+        {
+
+            Segment[] children = new Segment[4];
+
+            Vector v = Point.Subtract(b, a);
+            v = Vector.Divide(v, 3);
+
+            // Segment 0
+            Point b1 = Point.Add(a, v);
+            children[0] = new Segment(a, b1);
+
+            // Segment 3
+            Point a1 = Point.Subtract(b, v);
+            children[3] = new Segment(a1, b);
+
+            v = RotateRadians(v, -Math.PI / 3);
+            Point c = Point.Add(b1, v);
+
+            // Segment 1
+            children[1] = new Segment(b1, c);
+
+            // Segment 2
+            children[2] = new Segment(c, a1);
+
+            return children;
+        }
+
+        public Vector RotateRadians(Vector v, double radians)
+        {
+            var cos = Math.Cos(radians);
+            var sin = Math.Sin(radians);
+            return new Vector(v.X * cos - v.Y * sin, v.X * sin + v.Y * cos);
         }
     }
 }
