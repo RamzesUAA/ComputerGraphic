@@ -16,31 +16,23 @@ using System.Windows.Shapes;
 namespace CG_Project
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for CustomModalWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class CustomModalWindow : UserControl
     {
-        public MainWindow()
+        public CustomModalWindow()
         {
             InitializeComponent();
         }
 
-        private FractalWindow fractalWindow;
-
-        private void ColorSchemes_OnClick(object sender, RoutedEventArgs e)
+        private void UIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+            this.Visibility = Visibility.Hidden;
         }
 
-        private void BuildFractal_OnClick(object sender, RoutedEventArgs e)
+        private void gotIt(object sender, RoutedEventArgs e)
         {
-            if (fractalWindow == null)
-            {
-                fractalWindow = new FractalWindow(this);
-            }
-
             this.Visibility = Visibility.Hidden;
-            fractalWindow.Show();
         }
     }
 }

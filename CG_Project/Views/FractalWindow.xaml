@@ -8,92 +8,146 @@
         Title="FractalWindow" Height="600" Width="900"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Canvas Grid.Column="0" Grid.Row="0" Background="LightGray">
-            <Canvas Width="211" Height="211" Background="White" Canvas.Left="26" Canvas.Top="116">
-                <TextBlock Text="Choose fractal type" Foreground="Gray"                                           
+    <Grid Name="MainGrid">
+
+
+        <Grid Visibility="Visible">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Canvas Grid.Column="0" Grid.Row="0" Background="LightGray">
+                <Border CornerRadius="5"  Width="211" Height="211" Background="White" Canvas.Left="26" Canvas.Top="116">
+                    <Canvas >
+                        <TextBlock Text="Choose fractal type" Foreground="Gray"                                           
                            Margin="10, 10,0,0"
                            FontSize="14"/>
-                <ComboBox Name="fractalTypes" Height="26" Width="170" Canvas.Left="10" Canvas.Top="30" SelectionChanged="PhonesList_OnSelectionChanged">
-                    <TextBlock>Geometric</TextBlock>
-                    <TextBlock>IFS</TextBlock>
-                </ComboBox>
-                <StackPanel x:Name="radioButtonPannel" Canvas.Left="10" Canvas.Top="60" Height="55" Width="170">
-                </StackPanel>
-                <TextBlock Text="Enter number of iterations" Foreground="Gray"                                           
+                        <ComboBox Name="fractalTypes" Height="26" Width="170" Canvas.Left="10" Canvas.Top="30" SelectionChanged="PhonesList_OnSelectionChanged">
+                            <TextBlock>Geometric</TextBlock>
+                            <TextBlock>IFS</TextBlock>
+                        </ComboBox>
+                        <StackPanel x:Name="radioButtonPannel" Canvas.Left="10" Canvas.Top="60" Height="55" Width="170">
+                        </StackPanel>
+                        <TextBlock Text="Enter number of iterations" Foreground="Gray"                                           
                            Margin="10, 10,0,0"
                            FontSize="14" Canvas.Top="106"/>
 
-                <Border Canvas.Top="143" Canvas.Left="12" Width="66">
-                    <Border.OpacityMask>
-                        <VisualBrush>
-                            <VisualBrush.Visual>
-                                <Border Background="Black" SnapsToDevicePixels="True"
+                        <Border Canvas.Top="143" Canvas.Left="12" Width="66">
+                            <Border.OpacityMask>
+                                <VisualBrush>
+                                    <VisualBrush.Visual>
+                                        <Border Background="Black" SnapsToDevicePixels="True"
                             CornerRadius="4"
                             Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}"
                             Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}" />
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Border.OpacityMask>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="22" />
-                        </Grid.ColumnDefinitions>
-                        <TextBox x:Name="numberOfIterations" x:FieldModifier="private" FontWeight="Medium" FontSize="14" VerticalContentAlignment="Center" Padding="5,1" 
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </Border.OpacityMask>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="22" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="numberOfIterations" x:FieldModifier="private" FontWeight="Medium" FontSize="14" VerticalContentAlignment="Center" Padding="5,1" 
                      Grid.Column="0" Grid.RowSpan="2" Text="0" />
-                        <Button x:Name="cmdUp" x:FieldModifier="private" Grid.Column="1" Grid.Row="0" Width="auto" Height="auto" Click="CmdUp_OnClick">
-                            <Button.Content>
-                                <Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Black" Data="M4,0 L0,4 L8,4 z"/>
-                            </Button.Content>
-                        </Button>
-                        <Button x:Name="cmdDown" x:FieldModifier="private" Grid.Column="1" Grid.Row="1" Width="auto" Height="auto" Click="CmdDown_OnClick">
-                            <Button.Content>
-                                <Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Black" Data="M0,0 L8,0 L4,4 z"/>
-                            </Button.Content>
-                        </Button>
-                        <Border BorderBrush="Gray" IsHitTestVisible="False" BorderThickness="1" CornerRadius="4" Grid.RowSpan="2" 
+                                <Button x:Name="cmdUp" x:FieldModifier="private" Grid.Column="1" Grid.Row="0" Width="auto" Height="auto" Click="CmdUp_OnClick">
+                                    <Button.Content>
+                                        <Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Black" Data="M4,0 L0,4 L8,4 z"/>
+                                    </Button.Content>
+                                </Button>
+                                <Button x:Name="cmdDown" x:FieldModifier="private" Grid.Column="1" Grid.Row="1" Width="auto" Height="auto" Click="CmdDown_OnClick">
+                                    <Button.Content>
+                                        <Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Black" Data="M0,0 L8,0 L4,4 z"/>
+                                    </Button.Content>
+                                </Button>
+                                <Border BorderBrush="Gray" IsHitTestVisible="False" BorderThickness="1" CornerRadius="4" Grid.RowSpan="2" 
                     Grid.ColumnSpan="2" Padding="0" Margin="0" />
-                    </Grid>
-                </Border>
+                            </Grid>
+                        </Border>
 
-                <Button x:Name="buildFractal" Click="BuildFractal_OnClick"  Margin="0,0,0,0" Height="32" Width="123" Canvas.Left="10" Canvas.Top="171">
-                    <Button.Template>
-                        <ControlTemplate>
-                            <Border CornerRadius="10" Background="#92A9FF" >
-                                <Grid>
-                                    <TextBlock Text="Build" Foreground="White" 
+                        <Button x:Name="Download" Click="Download_OnClick" Height="20" Width="20"  Canvas.Left="169" Canvas.Top="177">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border CornerRadius="15" Background="Transparent">
+                                        <Image Stretch="Fill" Source="../sources/download_icon.png" Height="20" Width="20"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <Button x:Name="buildFractal" Click="BuildFractal_OnClick"  Margin="0,0,0,0" Height="32" Width="123" Canvas.Left="10" Canvas.Top="171">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border CornerRadius="3" Background="#92A9FF" >
+                                        <Grid>
+                                            <TextBlock Text="Build" Foreground="White" 
                                                FontWeight="Bold"
                                                HorizontalAlignment="Center"     
                                                VerticalAlignment="Center"
                                                FontSize="12"/>
+                                        </Grid>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Canvas>
+                </Border>
+                <Border CornerRadius="5" Width="610" Height="425" Background="White" Canvas.Left="253" Canvas.Top="116">
+                    <Canvas Name="fractalCanvas"  Width="610" Height="425">
+                    </Canvas>
+                </Border>
+                <Border CornerRadius="5"  Width="211" Height="203" Background="White" Canvas.Left="26" Canvas.Top="340">
+                    <Canvas>
+                        <Grid Height="203" Width="211">
+                            <TextBlock Text="" Foreground="Black"
+                               Name="infoBlockHeader"
+                               FontWeight="Bold"
+                               FontSize="16" Width="211" Margin="0,0,0,175"
+
+                               TextAlignment="Center"
+                               />
+                            <TextBlock Text="" Foreground="Gray" 
+                               Name="infoBlockDescription"
+                               HorizontalAlignment="Center"      
+                               TextWrapping="Wrap"
+                               Margin="0,28,0,0"
+                               Padding="8"
+                               FontSize="12" Width="211"/>
+                        </Grid>
+                    </Canvas>
+                </Border>
+                <Button x:Name="Back" Click="GoBack" Height="30" Width="30" Margin="30, 40,0, 0">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border CornerRadius="15" Background="Transparent">
+                                <Grid>
+                                    <Image Stretch="Fill" Source="../sources/left_arrow.png" Height="30" Width="30" />
                                 </Grid>
                             </Border>
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-            </Canvas>
-            <Canvas Name="fractalCanvas"  Width="610" Height="425" Background="White" Canvas.Left="253" Canvas.Top="116">
-            </Canvas>
-            <Canvas Width="211" Height="203" Background="White" Canvas.Left="26" Canvas.Top="340">
-            </Canvas>
-            <Image Margin="27,64,853,500" Stretch="Fill" Source="../sources/left_arrow.png" Height="29" Canvas.Left="1" Canvas.Top="-21" Width="29"/>
-            <TextBlock Text="Build Fractal" Foreground="Black" 
+                <TextBlock Text="Build Fractal" Foreground="Black" 
                        FontWeight="Bold"                                           
                        Margin="0,36,0,510"
                        FontSize="36" Canvas.Left="345"/>
-            <Image Height="28" Canvas.Left="836" Stretch="Fill" Source="../sources/help_icon.png" Canvas.Top="46" Width="28"/>
-        </Canvas>
 
+                <Button x:Name="Info" Click="Info_OnClick" Height="30" Width="30" Margin="30, 40,0, 0" Canvas.Left="781">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border CornerRadius="15" Background="Transparent">
+                                <Image Stretch="Fill" Source="../sources/help_icon.png" Height="30" Width="30"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Canvas>
+        </Grid>
     </Grid>
 </Window>

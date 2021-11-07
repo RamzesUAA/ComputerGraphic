@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CG_Project.Helpers;
 using CG_Project.Services;
+using Microsoft.Win32;
 
 namespace CG_Project
 {
@@ -18,11 +21,12 @@ namespace CG_Project
     public partial class FractalWindow : Window
     {
         private KochSnowflake kochSnowflake;
-        public FractalWindow()
+        private Window BaseWindow;
+        public FractalWindow(Window window)
         {
             InitializeComponent();
             kochSnowflake = new KochSnowflake(fractalCanvas);
-
+            BaseWindow = window;
             //for (int i = 0; i < 10000; ++i)
             //{
             //    KochSnowlakeFern();
@@ -236,7 +240,7 @@ namespace CG_Project
             Right
         }
 
-        private void DrawDragonLine( int level, Direction turn_towards, float x1, float y1, float dx, float dy)
+        private void DrawDragonLine(int level, Direction turn_towards, float x1, float y1, float dx, float dy)
         {
             if (level <= 0)
             {
@@ -305,17 +309,60 @@ namespace CG_Project
             fractalCanvas.Children.Add(ellipse);
 
         }
+        private void RadioButtonHandler_Click(object sender, RoutedEventArgs e)
+        {
+            var checkedValue = radioButtonPannel.Children.OfType<RadioButton>()
+                .FirstOrDefault(r => r.IsChecked.HasValue && r.IsChecked.Value);
+            switch (fractalTypes?.SelectedIndex)
+            {
+                case 0:
+                    if (checkedValue.Content.ToString() == FractalNames.KochCurve)
+                    {
+                        infoBlockHeader.Text = "Koch snowflake";
+                        infoBlockDescription.Text =
+                            "The Koch snowflake is a fractal curve and one of the earliest fractals to have been described. It is based on the Koch curve, which appeared in a 1904 paper titled \"On a Continuous Curve Without Tangents, Constructible from Elementary Geometry\" by the Swedish mathematician Helge von Koch.";
+                    }
+                    else if (checkedValue.Content.ToString() == FractalNames.DragonCurve)
+                    {
+                        infoBlockHeader.Text = "Dragon Curve";
+                        infoBlockDescription.Text =
+                            "The Harter-Heighway Dragon is created by iteration of the curve process described above, and is thus a type of fractal known as iterated function systems. ... An interesting property of this curve is that although the corners of the fractal seem to touch at various points, the curve never actually crosses over itself.";
+                    }
+                    break;
+                case 1:
+                    if (checkedValue.Content.ToString() == FractalNames.KochCurve)
+                    {
+                        infoBlockHeader.Text = "Koch snowflake";
+                        infoBlockDescription.Text =
+                            "The Koch snowflake is a fractal curve and one of the earliest fractals to have been described. It is based on the Koch curve, which appeared in a 1904 paper titled \"On a Continuous Curve Without Tangents, Constructible from Elementary Geometry\" by the Swedish mathematician Helge von Koch.";
+                    }
+                    else if (checkedValue.Content.ToString() == FractalNames.DragonCurve)
+                    {
+                        infoBlockHeader.Text = "Dragon Curve";
+                        infoBlockDescription.Text =
+                            "The Harter-Heighway Dragon is created by iteration of the curve process described above, and is thus a type of fractal known as iterated function systems. ... An interesting property of this curve is that although the corners of the fractal seem to touch at various points, the curve never actually crosses over itself.";
+                    }
+                    else if (checkedValue.Content.ToString() == FractalNames.BarnsleyFern)
+                    {
+                        infoBlockHeader.Text = "Barnsley fern";
+                        infoBlockDescription.Text =
+                            "The Barnsley fern is a fractal named after the British mathematician Michael Barnsley who first described it in his book Fractals Everywhere.[1] He made it to resemble the black spleenwort, Asplenium adiantum-nigrum.";
+                    }
+                    break;
+            }
+        }
         private void PhonesList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var fractals = new List<RadioButton>();
+            radioButtonPannel.Children.Clear();
             switch (fractalTypes.SelectedIndex)
             {
                 case 0:
-                    radioButtonPannel.Children.Clear();
                     fractals.Add(new RadioButton() { Content = FractalNames.KochCurve, IsChecked = false });
                     fractals.Add(new RadioButton() { Content = FractalNames.DragonCurve, IsChecked = false });
                     foreach (var fractal in fractals)
                     {
+                        fractal.Checked += RadioButtonHandler_Click;
                         radioButtonPannel.Children.Add(fractal);
                     }
                     break;
@@ -326,6 +373,7 @@ namespace CG_Project
                     fractals.Add(new RadioButton() { Content = FractalNames.BarnsleyFern, IsChecked = false });
                     foreach (var fractal in fractals)
                     {
+                        fractal.Checked += RadioButtonHandler_Click;
                         radioButtonPannel.Children.Add(fractal);
                     }
                     break;
@@ -346,10 +394,70 @@ namespace CG_Project
             fractalCanvas.Children.Add(ellipse);
 
         }
+
+        private void GoBack(object sender, RoutedEventArgs e)
+        {
+            BaseWindow.Visibility = Visibility.Visible;
+            this.Visibility = Visibility.Hidden;
+        }
+
+        private void Info_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Children.Add(new CustomModalWindow());
+        }
+
+        private void Download_OnClick(object sender, RoutedEventArgs e)
+        {
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.AddExtension = true;
+            saveFileDialog.OverwritePrompt = true;
+
+            saveFileDialog.Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            if (saveFileDialog.ShowDialog() == true)
+            {
+
+                using (FileStream stream = new FileStream(saveFileDialog.FileName, FileMode.Create))
+                {
+
+                    Rect rect = new Rect(fractalCanvas.Margin.Left, fractalCanvas.Margin.Top, fractalCanvas.ActualWidth, fractalCanvas.ActualHeight);
+
+                    double dpi = 96d;
+
+                    RenderTargetBitmap rtb = new RenderTargetBitmap((int)rect.Right, (int)rect.Bottom, dpi, dpi, System.Windows.Media.PixelFormats.Default);
+
+                    rtb.Render(fractalCanvas);
+
+                    var encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(BitmapFrame.Create(rtb)));
+                    encoder.Save(stream);
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+            //try
+            //{
+            //    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+
+            //    pngEncoder.Save(ms);
+            //    ms.Close();
+
+            //    System.IO.File.WriteAllBytes("sss.png", ms.ToArray());
+            //}
+            //catch (Exception err)
+            //{
+            //    MessageBox.Show(err.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //}
+        }
     }
-
-
-
-
-
 }
