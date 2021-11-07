@@ -42,5 +42,11 @@ namespace CG_Project
             this.Visibility = Visibility.Hidden;
             fractalWindow.Show();
         }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            Application.Current.Shutdown();
+        }
     }
 }

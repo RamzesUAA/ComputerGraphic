@@ -27,11 +27,6 @@ namespace CG_Project
             InitializeComponent();
             kochSnowflake = new KochSnowflake(fractalCanvas);
             BaseWindow = window;
-            //for (int i = 0; i < 10000; ++i)
-            //{
-            //    KochSnowlakeFern();
-            //    DrawPoint();
-            //}
         }
 
         protected override void OnClosed(EventArgs e)
@@ -133,8 +128,6 @@ namespace CG_Project
                     }
                     break;
             }
-
-
         }
 
         private double Map(double value, double istart, double istop, double ostart, double ostop)
@@ -244,7 +237,6 @@ namespace CG_Project
         {
             if (level <= 0)
             {
-
                 var line = new Line();
                 line.Stroke = Brushes.Black;
 
@@ -392,7 +384,6 @@ namespace CG_Project
             Canvas.SetLeft(ellipse, p.X);
             Canvas.SetTop(ellipse, p.Y);
             fractalCanvas.Children.Add(ellipse);
-
         }
 
         private void GoBack(object sender, RoutedEventArgs e)
@@ -434,30 +425,6 @@ namespace CG_Project
                     encoder.Save(stream);
                 }
             }
-
-
-
-
-
-
-
-
-
-
-
-            //try
-            //{
-            //    System.IO.MemoryStream ms = new System.IO.MemoryStream();
-
-            //    pngEncoder.Save(ms);
-            //    ms.Close();
-
-            //    System.IO.File.WriteAllBytes("sss.png", ms.ToArray());
-            //}
-            //catch (Exception err)
-            //{
-            //    MessageBox.Show(err.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
         }
     }
 }
