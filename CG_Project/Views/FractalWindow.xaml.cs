@@ -20,13 +20,13 @@ namespace CG_Project
         public FractalWindow()
         {
             InitializeComponent();
-            kochSnowflake = new KochSnowflake(fractalCanvas);
+            //kochSnowflake = new KochSnowflake(fractalCanvas);
 
-            for (int i = 0; i < 100; ++i)
-            {
-                KochSnowlakeFern();
-                DrawPoint();
-            }
+            //for (int i = 0; i < 10000; ++i)
+            //{
+            //    KochSnowlakeFern();
+            //    DrawPoint();
+            //}
         }
 
         protected override void OnClosed(EventArgs e)
@@ -69,10 +69,40 @@ namespace CG_Project
                 case 1:
                     if (checkedValue.Content.ToString() == FractalNames.KochCurve)
                     {
+                        kochSnowflake = new KochSnowflake(fractalCanvas);
+
+                        for (int i = 0; i < 10000; ++i)
+                        {
+                            KochSnowlakeFern();
+                            DrawPoint();
+                        }
                     }
                     else if (checkedValue.Content.ToString() == FractalNames.DragonCurve)
                     {
-
+                        x = 1.0;
+                        y = 0.0;
+                        var angle45 = Math.PI * 45 / 180;
+                        var angle135 = Math.PI * 135 / 180;
+                        var random = new Random(1);
+                        for (int i = 0; i < 10000; i++)
+                        {
+                            var nextNumber = random.Next(1, 3);
+                            if (nextNumber == 1)
+                            {
+                                var x1 = (x * Math.Cos(angle45) - y * Math.Sin(angle45)) / Math.Sqrt(2);
+                                var y1 = (x * Math.Sin(angle45) + y * Math.Cos(angle45)) / Math.Sqrt(2);
+                                x = x1; // !!!
+                                y = y1; // !!!
+                            }
+                            if (nextNumber == 2)
+                            {
+                                var x1 = (x * Math.Cos(angle135) - y * Math.Sin(angle135)) / Math.Sqrt(2) + 1;
+                                var y1 = (x * Math.Sin(angle135) + y * Math.Cos(angle135)) / Math.Sqrt(2);
+                                x = x1; // !!!
+                                y = y1; // !!!
+                            }
+                            DrawPoint();
+                        }
                     }
                     else if (checkedValue.Content.ToString() == FractalNames.BarnsleyFern)
                     {
@@ -193,7 +223,7 @@ namespace CG_Project
             double py = Map(y, -0.5, 10.5, fractalCanvas.Height, 0);
             //MessageBox.Show($"px: {x}, py: {y}");
 
-            Point p = new Point(px * 2, py);
+            Point p = new Point(px, py);
 
             var ellipse = new Ellipse() { Width = 3, Height = 3, Stroke = new SolidColorBrush(Colors.Black) };
             Canvas.SetLeft(ellipse, p.X);
