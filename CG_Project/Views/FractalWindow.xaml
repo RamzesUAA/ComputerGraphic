@@ -24,7 +24,7 @@
                         <TextBlock Text="Choose fractal type" Foreground="Gray"                                           
                            Margin="10, 10,0,0"
                            FontSize="14"/>
-                        <ComboBox Name="fractalTypes" Height="26" Width="170" Canvas.Left="10" Canvas.Top="30" SelectionChanged="PhonesList_OnSelectionChanged">
+                        <ComboBox Name="fractalTypes" Height="26" Width="170" Canvas.Left="10" Canvas.Top="30" SelectionChanged="FractalTypes_OnSelectionChangedList_OnSelectionChanged">
                             <TextBlock>Geometric</TextBlock>
                             <TextBlock>IFS</TextBlock>
                         </ComboBox>

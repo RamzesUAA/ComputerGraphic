@@ -21,32 +21,18 @@ namespace CG_Project
     public partial class FractalWindow : Window
     {
         private KochSnowflake kochSnowflake;
+        private DragonCurve dragonCurve;
         private Window BaseWindow;
+
+        double x = 0;
+        double y = 0;
+
         public FractalWindow(Window window)
         {
             InitializeComponent();
             kochSnowflake = new KochSnowflake(fractalCanvas);
+            dragonCurve = new DragonCurve(fractalCanvas);
             BaseWindow = window;
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-            Application.Current.Shutdown();
-        }
-
-        private void CmdUp_OnClick(object sender, RoutedEventArgs e)
-        {
-            var num = Convert.ToInt32(numberOfIterations.Text);
-            num += 1;
-            numberOfIterations.Text = num.ToString();
-        }
-
-        private void CmdDown_OnClick(object sender, RoutedEventArgs e)
-        {
-            var num = Convert.ToInt32(numberOfIterations.Text);
-            num -= 1;
-            numberOfIterations.Text = num.ToString();
         }
 
         private void BuildFractal_OnClick(object sender, RoutedEventArgs e)
@@ -63,20 +49,7 @@ namespace CG_Project
                     }
                     else if (checkedValue.Content.ToString() == FractalNames.DragonCurve)
                     {
-
-                        // Find the first control points.
-                        float dx = (float)(Math.Min(
-                            fractalCanvas.Width / 1.5f,
-                            fractalCanvas.Height) / 3f);
-
-                        // Try to center it a bit.
-                        float x0 = (float)((fractalCanvas.Width - dx * 1.5f) / 2f + dx / 3f);
-                        float y0 = (float)((fractalCanvas.Height - dx) / 2f + dx / 3f);
-
-                        // Recursively draw the lines.
-                        int level = Convert.ToInt32(numberOfIterations.Text);
-                        DrawDragonLine(level, Direction.Right, x0, y0, 2 * dx, 0);
-
+                        dragonCurve.RunGeometricDragonCurve(Convert.ToInt32(numberOfIterations.Text));
                     }
                     break;
                 case 1:
@@ -86,7 +59,7 @@ namespace CG_Project
 
                         for (int i = 0; i < 10000; ++i)
                         {
-                            KochSnowlakeFern();
+                            KochSnowlakeIFS();
                             DrawPoint();
                         }
                     }
@@ -119,12 +92,8 @@ namespace CG_Project
                     }
                     else if (checkedValue.Content.ToString() == FractalNames.BarnsleyFern)
                     {
-
-                        for (int i = 0; i < Convert.ToInt32(numberOfIterations.Text); ++i)
-                        {
-                            DrawPointFern();
-                            BarnsleyFern();
-                        }
+                        BarnsleyFernIFS barnsleyFern = new BarnsleyFernIFS(fractalCanvas);
+                        barnsleyFern.RunBarnsleyFernIFS(Convert.ToInt32(numberOfIterations.Text));
                     }
                     break;
             }
@@ -135,43 +104,8 @@ namespace CG_Project
             return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
 
         }
-        double x = 0;
-        double y = 0;
 
-        private void BarnsleyFern()
-        {
-            double nextX;
-            double nextY;
-
-            var rnd = new Random();
-
-            double r = rnd.NextDouble();
-
-            if (r < 0.01)
-            {
-                nextY = 0.16 * y;
-                nextX = 0;
-            }
-            else if (r < 0.86)
-            {
-                nextX = 0.85 * x + 0.04 * y;
-                nextY = -0.04 * x + 0.85 * y + 1.6;
-            }
-            else if (r < 0.93)
-            {
-                nextX = 0.2 * x + -0.26 * y;
-                nextY = 0.23 * x + 0.22 * y + 1.6;
-            }
-            else
-            {
-                nextX = -0.15 * x + 0.28 * y;
-                nextY = 0.26 * x + 0.24 * y + 0.44;
-            }
-            x = nextX;
-            y = nextY;
-        }
-
-        private void KochSnowlakeFern()
+        private void KochSnowlakeIFS()
         {
             double nextX;
             double nextY;
@@ -226,66 +160,6 @@ namespace CG_Project
             y = nextY;
         }
 
-        // The direction the curve should turn next.
-        private enum Direction
-        {
-            Left,
-            Right
-        }
-
-        private void DrawDragonLine(int level, Direction turn_towards, float x1, float y1, float dx, float dy)
-        {
-            if (level <= 0)
-            {
-                var line = new Line();
-                line.Stroke = Brushes.Black;
-
-                line.X1 = x1;
-                line.Y1 = y1;
-
-                line.X2 = x1 + dx;
-                line.Y2 = y1 + dy;
-
-                line.StrokeThickness = 2;
-                fractalCanvas.Children.Add(line);
-
-#if DRAW_POINTS
-                gr.DrawEllipse(Pens.Blue, x1 - 2, y1 - 2, 4, 4);
-                gr.DrawEllipse(Pens.Blue, x1 + dx - 2, y1 + dy - 2, 4, 4);
-#endif
-            }
-            else
-            {
-#if DRAW_LEVEL_MINUS_1
-                if (level == 1)
-                {
-                    gr.DrawLine(Pens.Silver, x1, y1, x1 + dx, y1 + dy);
-                }
-#endif
-                float nx = (float)(dx / 2);
-                float ny = (float)(dy / 2);
-                float dx2 = -ny + nx;
-                float dy2 = nx + ny;
-                if (turn_towards == Direction.Right)
-                {
-                    // Turn to the right.
-                    DrawDragonLine(level - 1, Direction.Right, x1, y1, dx2, dy2);
-                    float x2 = x1 + dx2;
-                    float y2 = y1 + dy2;
-                    DrawDragonLine(level - 1, Direction.Left, x2, y2, dy2, -dx2);
-                }
-                else
-                {
-                    // Turn to the left.
-                    DrawDragonLine(level - 1, Direction.Right, x1, y1, dy2, -dx2);
-                    float x2 = x1 + dy2;
-                    float y2 = y1 - dx2;
-                    DrawDragonLine(level - 1, Direction.Left, x2, y2, dx2, dy2);
-                }
-            }
-        }
-
-
         private void DrawPoint()
         {
             // Set the width/height boundaries
@@ -299,8 +173,28 @@ namespace CG_Project
             Canvas.SetLeft(ellipse, p.X);
             Canvas.SetTop(ellipse, p.Y);
             fractalCanvas.Children.Add(ellipse);
-
         }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            Application.Current.Shutdown();
+        }
+
+        private void CmdUp_OnClick(object sender, RoutedEventArgs e)
+        {
+            var num = Convert.ToInt32(numberOfIterations.Text);
+            num += 1;
+            numberOfIterations.Text = num.ToString();
+        }
+
+        private void CmdDown_OnClick(object sender, RoutedEventArgs e)
+        {
+            var num = Convert.ToInt32(numberOfIterations.Text);
+            num -= 1;
+            numberOfIterations.Text = num.ToString();
+        }
+
         private void RadioButtonHandler_Click(object sender, RoutedEventArgs e)
         {
             var checkedValue = radioButtonPannel.Children.OfType<RadioButton>()
@@ -343,7 +237,43 @@ namespace CG_Project
                     break;
             }
         }
-        private void PhonesList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void GoBack(object sender, RoutedEventArgs e)
+        {
+            BaseWindow.Visibility = Visibility.Visible;
+            this.Visibility = Visibility.Hidden;
+        }
+
+        private void Info_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Children.Add(new CustomModalWindow());
+        }
+
+        private void Download_OnClick(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.AddExtension = true;
+            saveFileDialog.OverwritePrompt = true;
+
+            saveFileDialog.Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                using (FileStream stream = new FileStream(saveFileDialog.FileName, FileMode.Create))
+                {
+                    Rect rect = new Rect(fractalCanvas.Margin.Left, fractalCanvas.Margin.Top, fractalCanvas.ActualWidth, fractalCanvas.ActualHeight);
+                    double dpi = 96d;
+
+                    RenderTargetBitmap rtb = new RenderTargetBitmap((int)rect.Right, (int)rect.Bottom, dpi, dpi, System.Windows.Media.PixelFormats.Default);
+                    rtb.Render(fractalCanvas);
+                    var encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(BitmapFrame.Create(rtb)));
+                    encoder.Save(stream);
+                }
+            }
+        }
+
+        private void FractalTypes_OnSelectionChangedList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var fractals = new List<RadioButton>();
             radioButtonPannel.Children.Clear();
@@ -369,61 +299,6 @@ namespace CG_Project
                         radioButtonPannel.Children.Add(fractal);
                     }
                     break;
-            }
-        }
-
-        private void DrawPointFern()
-        {
-            // Set the width/height boundaries
-            double px = Map(x, -2.8, 3.6558, 0, fractalCanvas.Width);
-            double py = Map(y, -0.5, 10.5, fractalCanvas.Height, 0);
-            //MessageBox.Show($"px: {x}, py: {y}");
-            Point p = new Point(px, py);
-
-            var ellipse = new Ellipse() { Width = 3, Height = 3, Stroke = new SolidColorBrush(Colors.Black) };
-            Canvas.SetLeft(ellipse, p.X);
-            Canvas.SetTop(ellipse, p.Y);
-            fractalCanvas.Children.Add(ellipse);
-        }
-
-        private void GoBack(object sender, RoutedEventArgs e)
-        {
-            BaseWindow.Visibility = Visibility.Visible;
-            this.Visibility = Visibility.Hidden;
-        }
-
-        private void Info_OnClick(object sender, RoutedEventArgs e)
-        {
-            MainGrid.Children.Add(new CustomModalWindow());
-        }
-
-        private void Download_OnClick(object sender, RoutedEventArgs e)
-        {
-
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.AddExtension = true;
-            saveFileDialog.OverwritePrompt = true;
-
-            saveFileDialog.Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*";
-            saveFileDialog.FilterIndex = 1;
-            if (saveFileDialog.ShowDialog() == true)
-            {
-
-                using (FileStream stream = new FileStream(saveFileDialog.FileName, FileMode.Create))
-                {
-
-                    Rect rect = new Rect(fractalCanvas.Margin.Left, fractalCanvas.Margin.Top, fractalCanvas.ActualWidth, fractalCanvas.ActualHeight);
-
-                    double dpi = 96d;
-
-                    RenderTargetBitmap rtb = new RenderTargetBitmap((int)rect.Right, (int)rect.Bottom, dpi, dpi, System.Windows.Media.PixelFormats.Default);
-
-                    rtb.Render(fractalCanvas);
-
-                    var encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(BitmapFrame.Create(rtb)));
-                    encoder.Save(stream);
-                }
             }
         }
     }
