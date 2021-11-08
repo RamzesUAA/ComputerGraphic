@@ -52,20 +52,9 @@ namespace CG_Project.Services
 
                 line.StrokeThickness = 2;
                 FractalCanvas.Children.Add(line);
-
-#if DRAW_POINTS
-                gr.DrawEllipse(Pens.Blue, x1 - 2, y1 - 2, 4, 4);
-                gr.DrawEllipse(Pens.Blue, x1 + dx - 2, y1 + dy - 2, 4, 4);
-#endif
             }
             else
             {
-#if DRAW_LEVEL_MINUS_1
-                if (level == 1)
-                {
-                    gr.DrawLine(Pens.Silver, x1, y1, x1 + dx, y1 + dy);
-                }
-#endif
                 float nx = (float)(dx / 2);
                 float ny = (float)(dy / 2);
                 float dx2 = -ny + nx;

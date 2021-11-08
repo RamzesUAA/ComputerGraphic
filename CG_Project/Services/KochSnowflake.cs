@@ -32,7 +32,6 @@ namespace CG_Project.Services
                 }
 
                 Segments = nextGeneration;
-
             }
 
             foreach (var segment in Segments)
