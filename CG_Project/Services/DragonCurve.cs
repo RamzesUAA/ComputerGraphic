@@ -2,10 +2,11 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using CG_Project.Interfaces;
 
 namespace CG_Project.Services
 {
-    class DragonCurve
+    class DragonCurve : IDrawFractal
     {
         private Canvas FractalCanvas;
 
@@ -13,7 +14,7 @@ namespace CG_Project.Services
         {
             FractalCanvas = fractalCanvas;
         }
-        public void RunGeometricDragonCurve(int numberOfIterations)
+        public void DrawFractal(int numberOfIterations)
         {
             // Find the first control points.
             float dx = (float)(Math.Min(
@@ -21,12 +22,12 @@ namespace CG_Project.Services
                 FractalCanvas.Height) / 3f);
 
             // Try to center it a bit.
-            float x0 = (float)((FractalCanvas.Width - dx * 1.5f) / 2f + dx / 3f);
+            float x0 = (float)((FractalCanvas.Width - dx * 2f) / 2f + dx / 3f);
             float y0 = (float)((FractalCanvas.Height - dx) / 2f + dx / 3f);
 
             // Recursively draw the lines.
             int level = numberOfIterations;
-            DrawDragonLine(level, Direction.Right, x0, y0, 2 * dx, 0);
+            DrawDragonLine(level, Direction.Right, x0, y0, (float)(2 * dx), 0);
         }
 
         // The direction the curve should turn next.
@@ -35,7 +36,6 @@ namespace CG_Project.Services
             Left,
             Right
         }
-
 
         private void DrawDragonLine(int level, Direction turn_towards, float x1, float y1, float dx, float dy)
         {

@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using CG_Project.Interfaces;
 
 namespace CG_Project.Services
 {
-    public class KochSnowflakeIFS
+    public class KochSnowflakeIFS : IDrawFractal
     {
         private Canvas FractalCanvas;
         public KochSnowflakeIFS(Canvas fractalCanvas)
@@ -19,7 +16,7 @@ namespace CG_Project.Services
             FractalCanvas = fractalCanvas;
         }
 
-        public void RunIFSKochSnowflake(int numberOfIterations)
+        public void DrawFractal(int numberOfIterations)
         {
             double x = 0;
             double y = 0;
@@ -38,45 +35,39 @@ namespace CG_Project.Services
 
             double r = rnd.NextDouble();
 
-            if (r < 0.1)
+            if (r < 0.2)
             {
                 // 1
                 nextX = -1 / 6.0 * x + Math.Sqrt(3) / 6.0 * y + 1 / 6.0;
                 nextY = -Math.Sqrt(3) / 6.0 * x + (-1 / 6.0 * y) + Math.Sqrt(3) / 6.0;
             }
-            else if (r < 0.32)
+            else if (r < 0.45)
             {
                 // 2
                 nextX = 1 / 6.0 * x + -Math.Sqrt(3) / 6.0 * y + 1 / 6.0;
                 nextY = Math.Sqrt(3) / 6 * x + 1 / 6.0 * y + Math.Sqrt(3) / 6.0;
             }
-            else if (r < 0.45)
+            else if (r < 0.55)
             {
                 // 3
                 nextX = 1 / 3.0 * x + 1 / 3.0;
                 nextY = 1 / 3.0 * y + Math.Sqrt(3) / 3.0;
             }
-            else if (r < 0.66)
+            else if (r < 0.73)
             {
                 // 4
                 nextX = 1 / 6.0 * x + Math.Sqrt(3) / 6.0 * y + 2 / 3.0;
                 nextY = (-Math.Sqrt(3) / 6.0 * x) + 1 / 6.0 * y + Math.Sqrt(3) / 3.0;
             }
-            else if (r < 0.78)
-            {
-                // 5
-                nextX = 1 / 2.0 * x + -Math.Sqrt(3) / 6.0 + 1 / 3.0;
-                nextY = Math.Sqrt(3) / 6.0 * x + 1 / 2.0 * y;
-            }
             else if (r < 0.88)
             {
-                //6
+                //5
                 nextX = -1 / 3.0 * x + 2 / 3.0;
                 nextY = -1 / 3.0 * y;
             }
             else
             {
-                //7
+                //6
                 nextX = 1 / 3.0 * x + 2 / 3.0;
                 nextY = 1 / 3.0 * y;
             }

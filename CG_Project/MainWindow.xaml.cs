@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CG_Project.Views;
 
 namespace CG_Project
 {
@@ -26,10 +27,17 @@ namespace CG_Project
         }
 
         private FractalWindow fractalWindow;
+        private ColorModelsWindow colorModelsWindow;
 
         private void ColorSchemes_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (colorModelsWindow == null)
+            {
+                colorModelsWindow = new ColorModelsWindow(this);
+            }
+
+            this.Visibility = Visibility.Hidden;
+            colorModelsWindow.Show();
         }
 
         private void BuildFractal_OnClick(object sender, RoutedEventArgs e)

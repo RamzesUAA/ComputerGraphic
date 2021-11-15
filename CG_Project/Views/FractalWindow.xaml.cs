@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using CG_Project.Helpers;
 using CG_Project.Services;
 using Microsoft.Win32;
@@ -36,6 +33,9 @@ namespace CG_Project
             barnsleyFern = new BarnsleyFernIFS(fractalCanvas);
             kochSnowflakeIFS = new KochSnowflakeIFS(fractalCanvas);
             dragonCurveIfs = new DragonCurveIFS(fractalCanvas);
+
+            kochSnowflakeIFS.DrawFractal(80000);
+
         }
 
         private void BuildFractal_OnClick(object sender, RoutedEventArgs e)
@@ -48,27 +48,27 @@ namespace CG_Project
                 case 0:
                     if (checkedValue.Content.ToString() == FractalNames.KochCurve)
                     {
-                        kochSnowflake.RunGeometricKochSnowflake(Convert.ToInt32(numberOfIterations.Text));
+                        kochSnowflake.DrawFractal(Convert.ToInt32(numberOfIterations.Text));
                         break;
                     }
                     else if (checkedValue.Content.ToString() == FractalNames.DragonCurve)
                     {
-                        dragonCurve.RunGeometricDragonCurve(Convert.ToInt32(numberOfIterations.Text));
+                        dragonCurve.DrawFractal(Convert.ToInt32(numberOfIterations.Text));
                         break;
                     }
                     break;
                 case 1:
                     if (checkedValue.Content.ToString() == FractalNames.KochCurve)
                     {
-                        kochSnowflakeIFS.RunIFSKochSnowflake(Convert.ToInt32(numberOfIterations.Text));
+                        kochSnowflakeIFS.DrawFractal(Convert.ToInt32(numberOfIterations.Text));
                     }
                     else if (checkedValue.Content.ToString() == FractalNames.DragonCurve)
                     {
-                        dragonCurveIfs.RunGeometricKochSnowflake(Convert.ToInt32(numberOfIterations.Text));
+                        dragonCurveIfs.DrawFractal(Convert.ToInt32(numberOfIterations.Text));
                     }
                     else if (checkedValue.Content.ToString() == FractalNames.BarnsleyFern)
                     {
-                        barnsleyFern.RunBarnsleyFernIFS(Convert.ToInt32(numberOfIterations.Text));
+                        barnsleyFern.DrawFractal(Convert.ToInt32(numberOfIterations.Text));
                     }
                     break;
             }

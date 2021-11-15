@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using CG_Project.Interfaces;
 
 namespace CG_Project.Services
 {
-    public class DragonCurveIFS
+    public class DragonCurveIFS : IDrawFractal
     {
         private Canvas FractalCanvas;
         public DragonCurveIFS(Canvas fractalCanvas)
         {
             FractalCanvas = fractalCanvas;
         }
-        public void RunGeometricKochSnowflake(int numberOfIterations)
+        public void DrawFractal(int numberOfIterations)
         {
             double x = 1.0;
             double y = 0.0;

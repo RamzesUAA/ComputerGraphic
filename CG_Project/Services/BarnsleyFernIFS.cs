@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using CG_Project.Interfaces;
 
 namespace CG_Project.Services
 {
-    public class BarnsleyFernIFS
+    public class BarnsleyFernIFS : IDrawFractal
     {
         private Canvas FractalCanvas;
 
@@ -16,7 +16,7 @@ namespace CG_Project.Services
             FractalCanvas = fractalCanvas;
         }
 
-        public void RunBarnsleyFernIFS(int numberOfIterations)
+        public void DrawFractal(int numberOfIterations)
         {
             double x = 0;
             double y = 0;

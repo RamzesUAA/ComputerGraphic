@@ -4,10 +4,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using CG_Project.Interfaces;
 
 namespace CG_Project.Services
 {
-    public class KochSnowflake
+    public class KochSnowflake : IDrawFractal
     {
         public List<Segment> Segments;
         public Canvas FractalCanvas;
@@ -18,7 +19,7 @@ namespace CG_Project.Services
             FractalCanvas = fractalCanvas;
         }
 
-        public void RunGeometricKochSnowflake(int numberOfIterations)
+        public void DrawFractal(int numberOfIterations)
         {
             InitKochSnowflake();
             for (int i = 0; i < numberOfIterations; ++i)

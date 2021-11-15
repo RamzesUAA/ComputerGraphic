@@ -16,6 +16,7 @@
     <None Remove="sources\help_icon.png" />
     <None Remove="sources\left_arrow.png" />
     <None Remove="sources\look_for_help.png" />
+    <None Remove="sources\upload_image_icon.png" />
     <None Remove="sources\welcome_image.png" />
   </ItemGroup>
 
@@ -42,6 +43,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="sources\look_for_help.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="sources\upload_image_icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="sources\welcome_image.png">
