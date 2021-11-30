@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CG_Project.Views"
         mc:Ignorable="d"
         Title="ColorModelsWindow" Height="600" Width="900"
         WindowStartupLocation="CenterScreen"
@@ -17,77 +16,157 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Canvas Grid.Column="0" Grid.Row="0" Background="LightGray">
-                <Border CornerRadius="5"  Width="211" Height="211" Background="White" Canvas.Left="26" Canvas.Top="116">
+                <Border CornerRadius="5"  Width="211" Height="135" Background="White" Canvas.Left="26" Canvas.Top="116">
                     <Canvas >
-                        <TextBlock Text="Choose fractal type" Foreground="Gray"                                           
-                           Margin="10, 10,0,0"
-                           FontSize="14"/>
-                        <!--<ComboBox Name="fractalTypes" Height="26" Width="170" Canvas.Left="10" Canvas.Top="30" SelectionChanged="FractalTypes_OnSelectionChangedList_OnSelectionChanged">
-                            <TextBlock>Geometric</TextBlock>
-                            <TextBlock>IFS</TextBlock>
-                        </ComboBox>-->
-                        <StackPanel x:Name="radioButtonPannel" Canvas.Left="10" Canvas.Top="60" Height="55" Width="170">
-                        </StackPanel>
-                        <TextBlock Text="Enter number of iterations" Foreground="Gray"                                           
-                           Margin="10, 10,0,0"
-                           FontSize="14" Canvas.Top="106"/>
+                        <Label Content="Yellow saturation:" FontSize="12" FontWeight="Medium" Width="110" Height="30"/>
+                        <Label Content="Lightness" FontSize="12" Width="211" Height="30" Canvas.Top="32"/>
+                        <Slider  Margin="5, 50,0,0" Value="50" Minimum="0" Maximum="100" SelectionStart="0" Height="auto" Width="200" IsSelectionRangeEnabled="True" ValueChanged="RangeBaseLightness_OnValueChanged" x:Name="LightnessSlider">
+                            <Slider.LayoutTransform>
+                                <ScaleTransform ScaleY="0.9" CenterX="15" CenterY="15"/>
+                            </Slider.LayoutTransform>
+                        </Slider>
+                        <Label Width="auto" x:Name="Persents" Content="50%" FontSize="12" FontWeight="Bold" Canvas.Left="177" Canvas.Top="30"/>
 
-                        <Border Canvas.Top="143" Canvas.Left="12" Width="66">
-                            <Border.OpacityMask>
-                                <VisualBrush>
-                                    <VisualBrush.Visual>
-                                        <Border Background="Black" SnapsToDevicePixels="True"
-                            CornerRadius="4"
-                            Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}"
-                            Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}" />
-                                    </VisualBrush.Visual>
-                                </VisualBrush>
-                            </Border.OpacityMask>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition Width="22" />
-                                </Grid.ColumnDefinitions>
-                                <TextBox x:Name="numberOfIterations" x:FieldModifier="private" FontWeight="Medium" FontSize="14" VerticalContentAlignment="Center" Padding="5,1" 
-                     Grid.Column="0" Grid.RowSpan="2" Text="0" />
+                        <Label Content="Saturation" FontSize="12" Width="211" Height="30" Canvas.Top="82"/>
+                        <Slider  Margin="5, 50,0,0" Value="50" Minimum="0" Maximum="100" SelectionStart="0" Height="auto" Width="200" IsSelectionRangeEnabled="True" ValueChanged="RangeBaseSaturation_OnValueChanged" x:Name="SaturationSlider" Canvas.Top="56">
+                            <Slider.LayoutTransform>
+                                <ScaleTransform ScaleY="0.9" CenterX="15" CenterY="15"/>
+                            </Slider.LayoutTransform>
+                        </Slider>
+                        <Label Width="auto" x:Name="Saturation" Content="50%" FontSize="12" FontWeight="Bold" Canvas.Left="177" Canvas.Top="80"/>
 
-                                <Border BorderBrush="Gray" IsHitTestVisible="False" BorderThickness="1" CornerRadius="4" Grid.RowSpan="2" 
-                    Grid.ColumnSpan="2" Padding="0" Margin="0" />
-                            </Grid>
-                        </Border>
                     </Canvas>
                 </Border>
                 <Border CornerRadius="5" Width="610" Height="425" Background="White" Canvas.Left="253" Canvas.Top="116">
                     <Canvas Name="fractalCanvas"  Width="610" Height="425">
-                        <Image Grid.Row="2" Grid.Column="1"  x:Name="StockImage" Source="../sources/upload_image_icon.png" Width="610" Height="425" Canvas.Left="0" Canvas.Top="0"/>
 
-                        <!--<Image x:Name="ColorModelImage" Source="../sources/upload_image_icon.png" MouseDown="Image_MouseDown" Cursor="Cross" MouseMove="ColorModelImage_MouseMove" Height="289" Width="366" Canvas.Left="122" RenderTransformOrigin="0.512,0.565" Canvas.Top="68"/>-->
-                        <Border x:Name="FragmentBorder" BorderThickness="1" Margin="0" Height="415" Width="610"/>
-                    </Canvas>
-                </Border>
-                <Border CornerRadius="5"  Width="211" Height="203" Background="White" Canvas.Left="26" Canvas.Top="340">
-                    <Canvas>
-                        <Grid Height="203" Width="211">
-                            <Button x:Name="uploadImage" Click="Upload_OnClick"  Margin="0,0,0,0" Height="32" Width="123" Canvas.Left="10" Canvas.Top="171">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Border CornerRadius="3" Background="#92A9FF" >
-                                            <Grid>
-                                                <TextBlock Text="Upload" Foreground="White" 
+                        <Button x:Name="showOrigin" Click="showOrigin_Click"  Width="150" Height="30" Canvas.Top="390" Canvas.Left="89">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border CornerRadius="3" Background="#92A9FF" >
+                                        <Grid>
+                                            <TextBlock Text="Show/Hide Source image" Foreground="White" 
                                                            FontWeight="Bold"
                                                            HorizontalAlignment="Center"     
                                                            VerticalAlignment="Center"
                                                            FontSize="12"/>
+                                        </Grid>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <Button x:Name="ResetArea" Click="ResetArea_Click"  Width="150" Height="30" Canvas.Top="390" Canvas.Left="389">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border CornerRadius="3" Background="#92A9FF" >
+                                        <Grid>
+                                            <TextBlock Text="Reset area selection" Foreground="White" 
+                                                           FontWeight="Bold"
+                                                           HorizontalAlignment="Center"     
+                                                           VerticalAlignment="Center"
+                                                           FontSize="12"/>
+                                        </Grid>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <StackPanel Width="610" Height="380">
+                            <Canvas Name="canDraw" Width="610" Height="380"
+                VerticalAlignment="Center" HorizontalAlignment="Center"
+                MouseDown="canDraw_MouseDown">
+                                <Image Name="ChangedImage" Width="610" Height="380" Visibility="Hidden"
+                                        HorizontalAlignment="Left" VerticalAlignment="Top" 
+                    Stretch="None" Source="/sources/upload_image_icon.png"
+                    Cursor="Cross"/>
+
+                                <Image Name="StockImage" Width="610" Height="380"
+                                        HorizontalAlignment="Left" VerticalAlignment="Top" 
+                    Stretch="None" Visibility="Hidden"
+                    Cursor="Cross"/>
+
+                                <Image Name="StartWindow" Width="610" Height="380" 
+                    Source="/sources/upload_image_icon.png"
+                    Cursor="Cross" Canvas.Left="-5"/>
+                            </Canvas>
+                        </StackPanel>
+
+                    </Canvas>
+                </Border>
+                <Border CornerRadius="5"  Width="211" Height="278" Background="White" Canvas.Left="26" Canvas.Top="265">
+                    <Canvas>
+                        <Grid x:Name="ColorPanelGrid" Grid.Column="2" HorizontalAlignment="Center" Height="203" Grid.Row="1" VerticalAlignment="Center" Width="211">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border BorderThickness="1" HorizontalAlignment="Left" Height="45" Margin="10,23,0,0" VerticalAlignment="Top" Width="183" Background="White" CornerRadius="10" Grid.ColumnSpan="2" BorderBrush="Gray"/>
+                            <Label Content="RGB" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" Foreground="Gray" Width="38"/>
+                            <Border  BorderThickness="1" HorizontalAlignment="Left" Height="45" Margin="48,23,0,0" VerticalAlignment="Top" Width="151" Background="White" CornerRadius="0 10 10 0" Grid.ColumnSpan="2" BorderBrush="Gray" RenderTransformOrigin="0.5,0.5">
+                                <Border.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform AngleY="0.13"/>
+                                        <RotateTransform/>
+                                        <TranslateTransform Y="0.164"/>
+                                    </TransformGroup>
+                                </Border.RenderTransform>
+                            </Border>
+                            <Label   x:Name="RGBLabel" Content="255, 255, 255" HorizontalAlignment="Left" Margin="53,33,0,0" VerticalAlignment="Top" Foreground="Gray" Grid.ColumnSpan="2" Width="130"/>
+
+                            <Border BorderThickness="1" HorizontalAlignment="Left" Height="45" Margin="10,0,0,0" VerticalAlignment="Center" Width="183" Background="White" CornerRadius="10" Grid.ColumnSpan="2" BorderBrush="Gray"/>
+                            <Label Content="HSL" HorizontalAlignment="Left" Margin="12,0,0,0" VerticalAlignment="Center" Foreground="Gray"/>
+                            <Border  BorderThickness="1" HorizontalAlignment="Left" Height="45" Margin="48,0,0,0" VerticalAlignment="Center" Width="153" Background="White" CornerRadius="0 10 10 0" Grid.ColumnSpan="2" BorderBrush="Gray"/>
+                            <Label x:Name="HSLLabel" Content="0, 0, 0" HorizontalAlignment="Left" Margin="53,0,0,0" VerticalAlignment="Center" Foreground="Gray" Grid.ColumnSpan="2" Width="130"/>
+                            <Border BorderThickness="1" HorizontalAlignment="Left" Height="45" Margin="10,132,0,0" VerticalAlignment="Top" Width="191" Background="White" CornerRadius="10" Grid.ColumnSpan="2" BorderBrush="Gray"/>
+                            <Label Content="CMYK" HorizontalAlignment="Left" Margin="11,142,0,0" VerticalAlignment="Top" Foreground="Gray" Width="37"/>
+                            <Border  BorderThickness="1" HorizontalAlignment="Left" Height="45" Margin="48,132,0,0" VerticalAlignment="Top" Width="153" Background="White" CornerRadius="0 10 10 0" Grid.ColumnSpan="2" BorderBrush="Gray"/>
+                            <Label x:Name="CMYKLabel"  Content="0%, 0%, 0%, 0%" HorizontalAlignment="Left" Margin="53,142,0,0" VerticalAlignment="Top" Foreground="Gray" Grid.ColumnSpan="2" Width="148"/>
+
+                            <Button x:Name="buildFractal" Click="Save_OnClick"  Margin="19,189,16,-25" Canvas.Left="10" Canvas.Top="171" Grid.ColumnSpan="2" RenderTransformOrigin="0.5,0.5">
+                                <Button.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="0.157"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Button.RenderTransform>
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Border CornerRadius="3" Background="#92A9FF" >
+                                            <Grid>
+                                                <Image Height="15" Canvas.Left="61" Stretch="Fill" Source="../sources/download_icon.png" Canvas.Top="159" Width="15" Margin="148,11,13,13"/>
+
+                                                <TextBlock Text="Save image" Foreground="White" 
+                                                           FontWeight="Bold"
+                                                           HorizontalAlignment="Center"     
+                                                           VerticalAlignment="Top"
+                                                           FontSize="12" Margin="0,9,0,0"/>
                                             </Grid>
                                         </Border>
                                     </ControlTemplate>
                                 </Button.Template>
                             </Button>
                         </Grid>
+
+                        <Button x:Name="uploadImage" Click="Upload_OnClick"  Margin="0,0,0,0" Height="34" Width="176" Canvas.Left="19" Canvas.Top="234">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border CornerRadius="3" Background="#92A9FF" >
+                                        <Grid>
+                                            <TextBlock Text="Upload" Foreground="White" 
+                                                           FontWeight="Bold"
+                                                           HorizontalAlignment="Center"     
+                                                           VerticalAlignment="Center"
+                                                           FontSize="12"/>
+                                        </Grid>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <!--
+                        </Grid>-->
                     </Canvas>
                 </Border>
                 <Button x:Name="Back" Click="GoBack" Height="20" Width="20" Margin="30, 40,0, 0" RenderTransformOrigin="0.5,0.535" Canvas.Left="4" Canvas.Top="10">
