@@ -25,7 +25,7 @@ namespace CG_Project.Views
 
         byte[] pixels;
         private byte[] pixelsHSL;
-        private byte[] pixelsData;
+        private byte[] pixelsCMYK;
 
         private Window BaseWindow;
 
@@ -61,8 +61,8 @@ namespace CG_Project.Views
             pixels = new byte[size];
             Image.CopyPixels(pixels, stride, 0);
 
-            ConvertFromRgbToCmyk();
             ConvertToRgbFromHsl();
+            ConvertFromRgbToCmyk();
 
             LightnessSlider.Value = 50;
         }
@@ -98,7 +98,7 @@ namespace CG_Project.Views
                     HSLLabel.Content = $"{Math.Round(hsl[0], 0)}, {Math.Round(hsl[1], 2)}, {Math.Round(hsl[2], 2)}";
                     RGBLabel.Content = $"{pixelsHSL[index + 2]}, {pixelsHSL[index + 1]}, {pixelsHSL[index]}";
 
-                    Color color1 = Color.FromArgb(pixelsData[index + 2], pixelsData[index + 1], pixelsData[index]);
+                    Color color1 = Color.FromArgb(pixelsCMYK[index + 2], pixelsCMYK[index + 1], pixelsCMYK[index]);
                     double[] cmyk = ColorConverter.RgbToCmyk(color1);
                     CMYKLabel.Content = $"{Math.Round(cmyk[0] * 100, 2)}% {Math.Round(cmyk[1] * 100, 2)}% {Math.Round(cmyk[2] * 100, 2)}% {Math.Round(cmyk[3] * 100, 2)}%";
                 }
@@ -131,23 +131,23 @@ namespace CG_Project.Views
 
         private void ConvertFromRgbToCmyk()
         {
-            pixelsData = new byte[size];
+            pixelsCMYK = new byte[size];
 
-            Image.CopyPixels(pixelsData, stride, 0);
+            Image.CopyPixels(pixelsCMYK, stride, 0);
             for (int i = 0; i < size; i += 4)
             {
                 if (i + 4 < pixels.Length)
                 {
-                    Color color = Color.FromArgb(pixelsData[i + 2], pixelsData[i + 1], pixelsData[i]);
+                    Color color = Color.FromArgb(pixelsCMYK[i + 2], pixelsCMYK[i + 1], pixelsCMYK[i]);
                     double[] cmyk = ColorConverter.RgbToCmyk(color);
                     byte[] RGB = ColorConverter.CmykToRgb(cmyk[0], cmyk[1], cmyk[2], cmyk[3]);
-                    pixelsData[i] = RGB[2];
-                    pixelsData[i + 1] = RGB[1];
-                    pixelsData[i + 2] = RGB[0];
+                    pixelsCMYK[i] = RGB[2];
+                    pixelsCMYK[i + 1] = RGB[1];
+                    pixelsCMYK[i + 2] = RGB[0];
                 }
             }
             WriteableBitmap newImage = new WriteableBitmap(Image.PixelWidth, Image.PixelHeight, Image.DpiX, Image.DpiY, Image.Format, Image.Palette);
-            newImage.WritePixels(new Int32Rect(0, 0, Image.PixelWidth, Image.PixelHeight), pixelsData, stride, 0);
+            newImage.WritePixels(new Int32Rect(0, 0, Image.PixelWidth, Image.PixelHeight), pixelsCMYK, stride, 0);
         }
 
         private void ConvertToRgbFromHsl()
@@ -201,7 +201,7 @@ namespace CG_Project.Views
                 Saturation.Content = Math.Round(e.NewValue, 0) + "%";
             if (Image != null)
             {
-                ChangeSaturation();
+                ChangeSaturationLightness();
             }
         }
 
@@ -211,11 +211,11 @@ namespace CG_Project.Views
                 Persents.Content = Math.Round(e.NewValue, 0) + "%";
             if (Image != null)
             {
-                ChangeSaturation();
+                ChangeSaturationLightness();
             }
         }
 
-        private void ChangeLightnessArea()
+        private void ChangeSaturationLightnessArea()
         {
             int x = (int)Math.Min(LastPoint.X, StartPoint.X);
             int y = (int)Math.Min(LastPoint.Y, StartPoint.Y);
@@ -261,54 +261,11 @@ namespace CG_Project.Views
             pixelsHSL = pixelsLData;
         }
 
-        //private void ChangeLightness()
-        //{
-        //    if (canDraw.Children.Contains(DragRectangle))
-        //    {
-        //        ChangeLightnessArea();
-        //    }
-        //    else
-        //    {
-        //        byte[] pixelsLData = new byte[size];
-        //        if (true)
-        //        {
-        //            Image.CopyPixels(pixelsLData, stride, 0);
-        //        }
-        //        else
-        //        {
-        //            return;
-        //        }
-
-        //        for (int i = 0; i < size; i += 4)
-        //        {
-        //            if (i + 4 < pixels.Length)
-        //            {
-        //                double[] hsl;
-        //                byte[] RGB;
-        //                Color color = Color.FromArgb(pixelsLData[i + 2], pixelsLData[i + 1], pixelsLData[i]);
-
-        //                hsl = ColorConverter.RgbToHslChange(pixelsLData[i + 2], pixelsLData[i + 1], pixelsLData[i], LightnessSlider.Value / 50d, SaturationSlider.Value / 50d);
-        //                RGB = ColorConverter.HslToRgb(hsl[0], hsl[1], hsl[2]);
-
-        //                pixelsLData[i] = RGB[2];
-        //                pixelsLData[i + 1] = RGB[1];
-        //                pixelsLData[i + 2] = RGB[0];
-        //            }
-        //        }
-        //        WriteableBitmap newImage = new WriteableBitmap(Image.PixelWidth, Image.PixelHeight, Image.DpiX, Image.DpiY, Image.Format, Image.Palette);
-        //        newImage.WritePixels(new Int32Rect(0, 0, Image.PixelWidth, Image.PixelHeight), pixelsLData, stride, 0);
-        //        HSLImage = newImage.ToBitmapImage();
-        //        ChangedImage.Source = HSLImage;
-        //        pixelsHSL = pixelsLData;
-
-        //    }
-        //}
-
-        private void ChangeSaturation()
+        private void ChangeSaturationLightness()
         {
             if (canDraw.Children.Contains(DragRectangle))
             {
-                ChangeLightnessArea();
+                ChangeSaturationLightnessArea();
             }
             else
             {
