@@ -222,9 +222,9 @@ namespace CG_Project.Views
             int width = (int)Math.Abs(LastPoint.X - StartPoint.X) + 1;
             int height = (int)Math.Abs(LastPoint.Y - StartPoint.Y) + 1;
 
-            byte[] pixelsLData = new byte[size];
+            byte[] pixelsData = new byte[size];
 
-            Image.CopyPixels(pixelsLData, stride, 0);
+            Image.CopyPixels(pixelsData, stride, 0);
 
 
             int indxPixel1 = (int)(stride * y);
@@ -241,24 +241,24 @@ namespace CG_Project.Views
                     {
                         double[] hsl;
                         byte[] RGB;
-                        Color color = Color.FromArgb(pixelsLData[i + 2], pixelsLData[i + 1], pixelsLData[i]);
-                        hsl = ColorConverter.RgbToHslChange(pixelsLData[i + 2], pixelsLData[i + 1], pixelsLData[i], LightnessSlider.Value / 50d, SaturationSlider.Value / 50d);
+                        Color color = Color.FromArgb(pixelsData[i + 2], pixelsData[i + 1], pixelsData[i]);
+                        hsl = ColorConverter.RgbToHslChange(pixelsData[i + 2], pixelsData[i + 1], pixelsData[i], LightnessSlider.Value / 50d, SaturationSlider.Value / 50d);
                         RGB = ColorConverter.HslToRgb(hsl[0], hsl[1], hsl[2]);
 
-                        pixelsLData[i] = RGB[2];
-                        pixelsLData[i + 1] = RGB[1];
-                        pixelsLData[i + 2] = RGB[0];
+                        pixelsData[i] = RGB[2];
+                        pixelsData[i + 1] = RGB[1];
+                        pixelsData[i + 2] = RGB[0];
                     }
 
                 }
             }
 
             WriteableBitmap newImage = new WriteableBitmap(Image.PixelWidth, Image.PixelHeight, Image.DpiX, Image.DpiY, Image.Format, Image.Palette);
-            newImage.WritePixels(new Int32Rect(0, 0, Image.PixelWidth, Image.PixelHeight), pixelsLData, stride, 0);
+            newImage.WritePixels(new Int32Rect(0, 0, Image.PixelWidth, Image.PixelHeight), pixelsData, stride, 0);
 
             HSLImage = newImage.ToBitmapImage();
             ChangedImage.Source = HSLImage;
-            pixelsHSL = pixelsLData;
+            pixelsHSL = pixelsData;
         }
 
         private void ChangeSaturationLightness()
