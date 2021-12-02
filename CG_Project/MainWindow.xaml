@@ -68,7 +68,7 @@
                 </Button.Template>
             </Button>
 
-            <Button x:Name="AffineTransformation" Click="ColorSchemes_OnClick"  Margin="80,410,0,0" Height="120" Width="300" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button x:Name="AffineTransformation" Click="AffineTransformation_Click"  Margin="80,410,0,0" Height="120" Width="300" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button.Template>
                     <ControlTemplate>
                         <Border CornerRadius="15" Background="White" >

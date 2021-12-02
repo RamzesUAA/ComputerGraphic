@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:CG_Project"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Style x:Key="SliderStyle" TargetType="{x:Type Slider}">
+        <!--<Style x:Key="SliderStyle" TargetType="{x:Type Slider}">
             <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
@@ -15,6 +15,6 @@
                     <Setter Property="Template" Value="{StaticResource SliderVertical}"/>
                 </Trigger>
             </Style.Triggers>
-        </Style>
+        </Style>-->
     </Application.Resources>
 </Application>

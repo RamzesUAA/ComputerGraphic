@@ -28,6 +28,7 @@ namespace CG_Project
 
         private FractalWindow fractalWindow;
         private ColorModelsWindow colorModelsWindow;
+        private AffineTransformationWindow affineTransformationWindow;
 
         private void ColorSchemes_OnClick(object sender, RoutedEventArgs e)
         {
@@ -55,6 +56,17 @@ namespace CG_Project
         {
             base.OnClosed(e);
             Application.Current.Shutdown();
+        }
+
+        private void AffineTransformation_Click(object sender, RoutedEventArgs e)
+        {
+            if (affineTransformationWindow == null)
+            {
+                affineTransformationWindow = new AffineTransformationWindow(this);
+            }
+
+            this.Visibility = Visibility.Hidden;
+            affineTransformationWindow.Show();
         }
     }
 }

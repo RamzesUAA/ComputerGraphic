@@ -33,9 +33,6 @@ namespace CG_Project
             barnsleyFern = new BarnsleyFernIFS(fractalCanvas);
             kochSnowflakeIFS = new KochSnowflakeIFS(fractalCanvas);
             dragonCurveIfs = new DragonCurveIFS(fractalCanvas);
-
-            kochSnowflakeIFS.DrawFractal(80000);
-
         }
 
         private void BuildFractal_OnClick(object sender, RoutedEventArgs e)
