@@ -9,6 +9,8 @@ using OxyPlot.Annotations;
 using System.Threading;
 using CG_Project.Services.AffineTransformation;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace CG_Project.Views
 {
@@ -34,6 +36,7 @@ namespace CG_Project.Views
 
         private void PaintFunction(CancellationToken token)
         {
+            int paintTimeout = 2000;
             try
             {
                 #region start
@@ -47,115 +50,19 @@ namespace CG_Project.Views
                 int y4 = Int32.Parse(y_1.Dispatcher.Invoke(() => { return y_4.Text; }));
                 #endregion
 
-                //Point chosenVertexAsPoint;
-                //chosenVertexAsPoint.X = x2;
-                //chosenVertexAsPoint.Y = y2;
-                //double[,] points = { { x1, y1, 1 }, { x2, y2, 1 }, { x3, y3, 1 }, { x4, y4, 1 } };
+                double[,] points = { { x1, y1, 1 }, { x2, y2, 1 }, { x3, y3, 1 }, { x4, y4, 1 } };
 
 
                 double coofA = Double.Parse(cooficient_A.Dispatcher.Invoke(() => { return cooficient_A.Text; }));
                 double coofB = Double.Parse(cooficient_B.Dispatcher.Invoke(() => { return cooficient_B.Text; }));
 
-
-                double angle = Math.Atan(coofA);
-                // - translate -b
-                // - rotate -angle
-                // - invert y
-                // - rotate angle
-                // - transtlate b
-                AffineTransformation.AffineMatrix translationMatrix =
-                    new AffineTransformation.AffineMatrix(
-                        1,
-                        0,
-                        0,
-                        1,
-                        0,
-                        -coofB);
-
-                AffineTransformation.AffineMatrix rotationMatrix =
-                    new AffineTransformation.AffineMatrix(
-                        Math.Cos(-angle),
-                        -Math.Sin(-angle),
-                        Math.Sin(-angle),
-                        Math.Cos(-angle),
-                        0,
-                        0);
-
-                AffineTransformation.AffineMatrix scalingMatrix =
-                    new AffineTransformation.AffineMatrix(
-                        1,
-                        0,
-                        0,
-                        -1,
-                        0,
-                        0);
-
-                AffineTransformation.AffineMatrix rotationBackMatrix =
-                    new AffineTransformation.AffineMatrix(
-                        Math.Cos(angle),
-                        -Math.Sin(angle),
-                        Math.Sin(angle),
-                        Math.Cos(angle),
-                        0,
-                        0);
-
-                AffineTransformation.AffineMatrix translationBackMatrix =
-                new AffineTransformation.AffineMatrix(
-                    1,
-                    0,
-                    0,
-                    1,
-                    0,
-                    coofB);
-
-                Point origin = new Point(0, 0);
-                Point p1 = new Point(x1, y1);
-                Point p2 = new Point(x2, y2);
-                Point p3 = new Point(x3, y3);
-                Point p4 = new Point(x4, y4);
-
-
-                p1 = AffineTransformation.Transform(p1, origin, translationMatrix);
-                p2 = AffineTransformation.Transform(p2, origin, translationMatrix);
-                p3 = AffineTransformation.Transform(p3, origin, translationMatrix);
-                p4 = AffineTransformation.Transform(p4, origin, translationMatrix);
-
-                p1 = AffineTransformation.Transform(p1, origin, rotationMatrix);
-                p2 = AffineTransformation.Transform(p2, origin, rotationMatrix);
-                p3 = AffineTransformation.Transform(p3, origin, rotationMatrix);
-                p4 = AffineTransformation.Transform(p4, origin, rotationMatrix);
-
-                p1 = AffineTransformation.Transform(p1, origin, scalingMatrix);
-                p2 = AffineTransformation.Transform(p2, origin, scalingMatrix);
-                p3 = AffineTransformation.Transform(p3, origin, scalingMatrix);
-                p4 = AffineTransformation.Transform(p4, origin, scalingMatrix);
-
-                p1 = AffineTransformation.Transform(p1, origin, rotationBackMatrix);
-                p2 = AffineTransformation.Transform(p2, origin, rotationBackMatrix);
-                p3 = AffineTransformation.Transform(p3, origin, rotationBackMatrix);
-                p4 = AffineTransformation.Transform(p4, origin, rotationBackMatrix);
-
-                p1 = AffineTransformation.Transform(p1, origin, translationBackMatrix);
-                p2 = AffineTransformation.Transform(p2, origin, translationBackMatrix);
-                p3 = AffineTransformation.Transform(p3, origin, translationBackMatrix);
-                p4 = AffineTransformation.Transform(p4, origin, translationBackMatrix);
-
-                double[,] newPoints =
+                while (buttonStopWasClicked)
                 {
-                    { p1.X, p1.Y },
-                    { p2.X, p2.Y },
-                    { p3.X, p3.Y },
-                    { p4.X, p4.Y }
-                };
-
-                PaintParallelogram(newPoints);
-                //while (true)
-                //{
-                //    points = _transformator.Transform(points, coofA, coofB);
-                //    PaintParallelogram(points);
-                //    token.ThrowIfCancellationRequested();
-                //    Thread.Sleep(paintTimeout);
-                //}
+                    points = _transformator.Transform(points, coofA, coofB);
+                    PaintParallelogram(points);
+                    token.ThrowIfCancellationRequested();
+                    Thread.Sleep(paintTimeout);
+                }
             }
             catch (OperationCanceledException e)
             {
@@ -167,56 +74,34 @@ namespace CG_Project.Views
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-
-
-            //try
-            //{
-            //    #region start
-            //    int x1 = Int32.Parse(x_1.Dispatcher.Invoke(() => { return x_1.Text; }));
-            //    int y1 = Int32.Parse(y_1.Dispatcher.Invoke(() => { return y_1.Text; }));
-            //    int x2 = Int32.Parse(x_1.Dispatcher.Invoke(() => { return x_2.Text; }));
-            //    int y2 = Int32.Parse(y_1.Dispatcher.Invoke(() => { return y_2.Text; }));
-            //    int x3 = Int32.Parse(x_1.Dispatcher.Invoke(() => { return x_3.Text; }));
-            //    int y3 = Int32.Parse(y_1.Dispatcher.Invoke(() => { return y_3.Text; }));
-            //    int x4 = Int32.Parse(x_1.Dispatcher.Invoke(() => { return x_4.Text; }));
-            //    int y4 = Int32.Parse(y_1.Dispatcher.Invoke(() => { return y_4.Text; }));
-            //    #endregion
-
-            //    //Point chosenVertexAsPoint;
-            //    //chosenVertexAsPoint.X = x2;
-            //    //chosenVertexAsPoint.Y = y2;
-            //    double[,] points = { { x1, y1, 1 }, { x2, y2, 1 }, { x3, y3, 1 }, { x4, y4, 1 } };
-
-
-            //    int coofA = Int32.Parse(cooficient_A.Dispatcher.Invoke(() => { return cooficient_A.Text; }));
-            //    int coofB = Int32.Parse(cooficient_B.Dispatcher.Invoke(() => { return cooficient_B.Text; }));
-            //    points = _transformator.Transform(points, coofA, coofB);
-            //    PaintParallelogram(points);
-            //    //while (true)
-            //    //{
-            //    //    points = _transformator.Transform(points, coofA, coofB);
-            //    //    PaintParallelogram(points);
-            //    //    token.ThrowIfCancellationRequested();
-            //    //    Thread.Sleep(paintTimeout);
-            //    //}
-            //}
-            //catch (OperationCanceledException e)
-            //{
-            //    return;
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show("Uncorrect input data. Try again \n" + e.Message, "Input Error",
-            //        MessageBoxButton.OK, MessageBoxImage.Error);
-            //    return;
-            //}
         }
 
         private void playBtn_Click(object sender, RoutedEventArgs e)
         {
+            var playIcon = playBtn.Template.FindName("PlayIcon", playBtn) as System.Windows.Controls.Image;
+            var stopIcon = playBtn.Template.FindName("StopIcon", playBtn) as System.Windows.Controls.Image;
+            var playStopText = playBtn.Template.FindName("PlayStopText", playBtn) as TextBlock;
+
+
             buttonStopWasClicked = !buttonStopWasClicked;
-            token = new CancellationTokenSource();
-            Task.Run(() => PaintFunction(token.Token), token.Token);
+
+            if (buttonStopWasClicked)
+            {
+                playIcon.Visibility = Visibility.Hidden;
+                stopIcon.Visibility = Visibility.Visible;
+                playStopText.Text = "Stop";
+                playStopText.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 182, 29));
+                token = new CancellationTokenSource();
+                Task.Run(() => PaintFunction(token.Token), token.Token);
+            }
+            else
+            {
+                token.Cancel();
+                playIcon.Visibility = Visibility.Visible;
+                stopIcon.Visibility = Visibility.Hidden; ;
+                playStopText.Text = "Start";
+                playStopText.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(146, 169, 255));
+            }
         }
 
         private double[,] CalculateFourthParallelogramVertex(double[,] vertexes)
@@ -400,12 +285,21 @@ namespace CG_Project.Views
             int coofA = Int32.Parse(cooficient_A.Text);
             int coofB = Int32.Parse(cooficient_B.Text);
             const int Y = 500;
-            double x1 = (-coofB + (-Y)) / coofA;
-            double x2 = (-coofB + Y) / coofA;
+            if (coofA == 0)
+            {
+                line.Points.Add(new DataPoint(-Y, coofB));
+                line.Points.Add(new DataPoint(Y, coofB));
+            }
+            else
+            {
+                double x1 = coofA == 0 ? 0 : (-coofB + (-Y)) / coofA;
+                double x2 = (-coofB + Y) / coofA;
 
-            line.SeriesGroupName = "Lines";
-            line.Points.Add(new DataPoint(x1, -Y));
-            line.Points.Add(new DataPoint(x2, Y));
+                line.SeriesGroupName = "Lines";
+                line.Points.Add(new DataPoint(x1, -Y));
+                line.Points.Add(new DataPoint(x2, Y));
+            }
+
             plotModel.Series.Add(line);
             line.Color = OxyColor.FromRgb(0, 0, 0);
 
@@ -427,7 +321,6 @@ namespace CG_Project.Views
             BaseWindow.Visibility = Visibility.Visible;
             this.Visibility = Visibility.Hidden;
         }
-
 
         private void resetParalelogram_Click(object sender, RoutedEventArgs e)
         {

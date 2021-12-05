@@ -8,11 +8,9 @@ namespace CG_Project.Services.AffineTransformation
         public double[,] Transform(double[,] inputParallelogram, double coeffA, double coeffB)
         {
             var radians = Math.Atan(coeffA);
-            //var radians1 = -Math.Atan(70.1);
-            //double degrees = (180 / Math.PI) * radians;
 
             var simplfyToB = ReturnSimplifierToB(coeffB);
-            var turnedParallelogramAtCenter = Multiply(simplfyToB, ReturnTurnTransformationMatrix(-radians));
+            var turnedParallelogramAtCenter = Multiply(simplfyToB, ReturnTurnTransformationMatrix(radians));
             var mirrorMatrix = Multiply(turnedParallelogramAtCenter, ReturnMirrorTransformationMatrix());
 
             var backTransformation = Multiply(mirrorMatrix, ReturnBackTurnTransformationMatrix(radians));   
@@ -39,8 +37,8 @@ namespace CG_Project.Services.AffineTransformation
 
         public double[,] ReturnMirrorTransformationMatrix()
         {
-            double[,] matr = {{  0,   1,  0 },
-                              {  1,   0,  0 },
+            double[,] matr = {{  1,   0,   0 },
+                              {  0,   -1,  0 },
                               {  0,   0,  1 }};
             return matr;
         }
