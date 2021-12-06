@@ -349,6 +349,11 @@ namespace CG_Project.Views
             }
         }
 
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Children.Add(new ColorAbout());
+        }
+
         private void canDraw_MouseDown(object sender, MouseButtonEventArgs e)
         {
             canDraw.Children.Remove(DragRectangle);

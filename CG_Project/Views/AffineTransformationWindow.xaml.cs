@@ -331,5 +331,10 @@ namespace CG_Project.Views
         {
             buildParalelogram_Click(this, null);
         }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Children.Add(new AffineAbout());
+        }
     }
 }

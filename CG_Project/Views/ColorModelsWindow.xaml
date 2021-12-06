@@ -194,6 +194,15 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
+                <Button x:Name="About" Click="About_Click" Height="20" Width="20" Margin="5, 40,0, 0" Canvas.Left="799" Canvas.Top="10">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border CornerRadius="15">
+                                <Image Stretch="Fill" Source="../sources/about.png" Height="17" Width="17"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </Canvas>
         </Grid>
     </Grid>

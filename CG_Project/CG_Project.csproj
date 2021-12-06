@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="sources\about.png" />
     <None Remove="sources\affine_transofrmation_icon.png" />
     <None Remove="sources\build_fractal_icon.png" />
     <None Remove="sources\close_icon.png" />
@@ -23,6 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="sources\about.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="sources\play_icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -70,6 +74,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="ViewModal\ColorAbout.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ViewModal\AffineAbout.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="ViewModal\AffineModal.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

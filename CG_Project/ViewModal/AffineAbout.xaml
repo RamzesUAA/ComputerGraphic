@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="CG_Project.AffineAbout"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CG_Project"
+             mc:Ignorable="d" 
+             BorderThickness="0">
+    <Grid>
+
+        <Rectangle Fill="Gray" MouseDown="UIElement_OnMouseDown" Opacity=".5"></Rectangle>
+
+        <Border CornerRadius="10" Background="White" Height="400" Width="700">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="43*" />
+                    <ColumnDefinition Width="55*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Canvas Grid.Row="0" Grid.ColumnSpan="2">
+                    <TextBlock Text="Affine Transformation" Foreground="Black"
+                               Name="infoBlockHeader"
+                               FontWeight="Bold"
+                               FontSize="16" Width="690" Margin="0,0,0,175"
+
+                               TextAlignment="Center" Canvas.Top="10"
+                    />
+                    <TextBlock Foreground="Gray" 
+                               x:Name="infoBlockDescription"      
+                               TextWrapping="Wrap"
+                               Margin="0,28,0,0"
+                               Padding="8"
+                               FontSize="14" Width="670" Canvas.Top="21" Height="287" Canvas.Left="10" Text="An affine transformation is any transformation that preserves collinearity (i.e., all points lying on a line initially still lie on a line after transformation) and ratios of distances (e.g., the midpoint of a line segment remains the midpoint after transformation). In this sense, affine indicates a special class of projective transformations that do not move any objects from the affine space  to the plane at infinity or conversely. An affine transformation is also called an affinity. Geometric contraction, expansion, dilation, reflection, rotation, shear, similarity transformations, spiral similarities, and translation are all affine transformations, as are their combinations. In general, an affine transformation is a composition of rotations, translations, dilations, and shears. While an affine transformation preserves proportions on lines, it does not necessarily preserve angles or lengths. Any triangle can be transformed into any other by an affine transformation, so all triangles are affine and, in this sense, affine is a generalization of congruent and similar."/>
+
+                    <Button x:Name="buildFractal" Click="gotIt"  Margin="0,0,0,0" Height="27" Width="108" Canvas.Left="291" Canvas.Top="341">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border CornerRadius="3" Background="#92A9FF" >
+                                    <Grid>
+                                        <TextBlock Text="Got It!" Foreground="White" 
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"     
+                                                   VerticalAlignment="Center"
+                                                   FontSize="12"/>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Canvas>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
