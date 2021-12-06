@@ -18,9 +18,9 @@ namespace CG_Project
     /// <summary>
     /// Interaction logic for CustomModalWindow.xaml
     /// </summary>
-    public partial class CustomModalWindow : UserControl
+    public partial class ColorModal : UserControl
     {
-        public CustomModalWindow()
+        public ColorModal()
         {
             InitializeComponent();
         }

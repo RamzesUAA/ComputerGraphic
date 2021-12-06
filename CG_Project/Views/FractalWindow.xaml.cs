@@ -142,7 +142,7 @@ namespace CG_Project
 
         private void Info_OnClick(object sender, RoutedEventArgs e)
         {
-            MainGrid.Children.Add(new CustomModalWindow());
+            MainGrid.Children.Add(new FractalModal());
         }
 
         private void Download_OnClick(object sender, RoutedEventArgs e)

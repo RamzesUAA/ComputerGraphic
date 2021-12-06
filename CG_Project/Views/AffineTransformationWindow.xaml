@@ -295,7 +295,7 @@
                        Margin="0,36,0,510"
                        FontSize="32" Canvas.Left="283"/>
 
-                <Button x:Name="Info" Height="20" Width="20" Margin="30, 40,0, 0" Canvas.Left="799" Canvas.Top="10">
+                <Button x:Name="Info" Click="Info_OnClick" Height="20" Width="20" Margin="30, 40,0, 0" Canvas.Left="799" Canvas.Top="10">
                     <Button.Template>
                         <ControlTemplate>
                             <Border CornerRadius="15" Background="Transparent">

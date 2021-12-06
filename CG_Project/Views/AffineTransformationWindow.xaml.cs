@@ -155,6 +155,11 @@ namespace CG_Project.Views
             }
         }
 
+        private void Info_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Children.Add(new AffineModal());
+        }
+
         private void SetAnnotaionForPoint(PlotModel plotModel, DataPoint points, string name)
         {
             plotModel.Annotations.Add(new PointAnnotation()

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="CG_Project.CustomModalWindow"
+﻿<UserControl x:Class="CG_Project.AffineModal"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -21,24 +21,28 @@
                 </Grid.RowDefinitions>
 
                 <Canvas Grid.Column="0" Grid.Row="0" Name="left" Margin="0,0,39,0">
-                    <Image Stretch="Fill" Source="sources/look_for_help.png" Height="132" Width="168" Canvas.Top="79" Canvas.Left="52"/>
+                    <Image Stretch="Fill" Source="../sources/look_for_help.png" Height="132" Width="168" Canvas.Top="79" Canvas.Left="52"/>
                 </Canvas>
                 <Canvas Grid.Row="0" Grid.Column="1">
-                    <TextBlock Text="Guide to Bulid Fractal" Foreground="Black"
+                    <TextBlock Text="Guide to Affine Transformation" Foreground="Black"
                                Name="infoBlockHeader"
                                FontWeight="Bold"
-                               FontSize="16" Width="331" Margin="0,0,0,175"
+                               FontSize="16" Width="332" Margin="0,0,0,175"
 
-                               TextAlignment="Center" Canvas.Top="48"
+                               TextAlignment="Center" Canvas.Top="35"
                     />
                     <TextBlock Foreground="Gray" 
                                x:Name="infoBlockDescription"      
                                TextWrapping="Wrap"
                                Margin="0,28,0,0"
                                Padding="8"
-                               FontSize="14" Width="275" Canvas.Top="59" Height="130" Canvas.Left="28"><Run Text=" 1. Choose fractal type on drop-down 1&#xA; 2. Enter number of iterations 1&#xA; 3. Press on 'Build' button 1"/><LineBreak/><Run Text="&#xA;  * Optionally you can download the image by clicking the appropriate icon"/></TextBlock>
+                               FontSize="14" Width="276" Canvas.Top="40" Height="177" Canvas.Left="28">
+                        <Run Text=" 1. Fill coordinates fields with appropriate numberic data. &#xA; 2. Press on 'Build parallelogram' button &#xA; 3. Enter a and b coefficients &#xA; 4. Press on 'Build line' button"/>
+                        <LineBreak/>
+                        <Run Text="&#xA;  * Optionally you can download the image by clicking the appropriate icon"/>
+                    </TextBlock>
 
-                    <Button x:Name="buildFractal" Click="gotIt"  Margin="0,0,0,0" Height="27" Width="108" Canvas.Left="112" Canvas.Top="222">
+                    <Button x:Name="buildFractal" Click="gotIt"  Margin="0,0,0,0" Height="27" Width="108" Canvas.Left="112" Canvas.Top="250">
                         <Button.Template>
                             <ControlTemplate>
                                 <Border CornerRadius="3" Background="#92A9FF" >

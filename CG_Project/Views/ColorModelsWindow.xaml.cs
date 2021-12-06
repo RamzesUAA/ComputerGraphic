@@ -181,7 +181,7 @@ namespace CG_Project.Views
 
         private void Info_OnClick(object sender, RoutedEventArgs e)
         {
-            MainGrid.Children.Add(new CustomModalWindow());
+            MainGrid.Children.Add(new ColorModal());
         }
 
         protected override void OnClosed(EventArgs e)

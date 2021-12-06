@@ -7,14 +7,14 @@ namespace CG_Project.Services.AffineTransformation
     {
         public double[,] Transform(double[,] inputParallelogram, double coeffA, double coeffB)
         {
-            var radians = Math.Atan(coeffA);
+            var radians = Math.Atan(coeffA); // y = 2x + 3
 
-            var simplfyToB = ReturnSimplifierToB(coeffB);
-            var turnedParallelogramAtCenter = Multiply(simplfyToB, ReturnTurnTransformationMatrix(radians));
+            var simplfyToB = ReturnSimplifierToB(coeffB); // y = 2x
+            var turnedParallelogramAtCenter = Multiply(simplfyToB, ReturnTurnTransformationMatrix(radians)); // y = x   
             var mirrorMatrix = Multiply(turnedParallelogramAtCenter, ReturnMirrorTransformationMatrix());
 
-            var backTransformation = Multiply(mirrorMatrix, ReturnBackTurnTransformationMatrix(radians));   
-            var backTransformationToPlusB = Multiply(backTransformation, ReturnSimplifierToPlusB(coeffB));
+            var backTransformation = Multiply(mirrorMatrix, ReturnBackTurnTransformationMatrix(radians));   // y = 2x
+            var backTransformationToPlusB = Multiply(backTransformation, ReturnSimplifierToPlusB(coeffB)); // y = 2x + 3
 
             return Multiply(inputParallelogram, backTransformationToPlusB);
         }
